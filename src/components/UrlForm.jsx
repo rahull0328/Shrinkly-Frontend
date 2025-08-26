@@ -1,8 +1,18 @@
+import axios from "axios";
 import { useState } from "react";
 
 const UrlForm = () => {
   const [url, setUrl] = useState("https://www.google.com");
+  const [error, setError] = useState(null)
+  const [shortUrl, setShortUrl] = useState()
 
+  const handleSubmit = async () => {
+    try {
+      const shortUrl = await createShortUrl(url)
+    } catch (error) {
+      setError(error.message)
+    }
+  }
   return (
     <div className="space-y-4">
       <div>
@@ -25,6 +35,7 @@ const UrlForm = () => {
       <button
         type="submit"
         className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+        onClick={handleSubmit}
       >
         Shorten URL
       </button>
