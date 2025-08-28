@@ -1,18 +1,31 @@
 import axios from "axios";
 import { useState } from "react";
+import { createShortUrl } from "../api/shortUrl.api";
 
 const UrlForm = () => {
   const [url, setUrl] = useState("https://www.google.com");
   const [error, setError] = useState(null)
   const [shortUrl, setShortUrl] = useState()
-
+  const [copied, setCopied] = useState(null)
   const handleSubmit = async () => {
     try {
       const shortUrl = await createShortUrl(url)
+      setShortUrl(shortUrl)
     } catch (error) {
       setError(error.message)
     }
   }
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(shortUrl);
+    setCopied(true);
+    
+    // Reset the copied state after 2 seconds
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  }
+
   return (
     <div className="space-y-4">
       <div>
@@ -39,11 +52,11 @@ const UrlForm = () => {
       >
         Shorten URL
       </button>
-      {/* {error && (
+      {error && (
           <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-md">
             {error}
           </div>
-        )} */}
+        )}
       {/* {isAuthenticated && (
           <div className="mt-4">
             <label htmlFor="customSlug" className="block text-sm font-medium text-gray-700 mb-1">
@@ -56,7 +69,7 @@ const UrlForm = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-        )}
+        )} */}
         {shortUrl && (
           <div className="mt-6">
             <h2 className="text-lg font-semibold mb-2">Your shortened URL:</h2>
@@ -79,7 +92,7 @@ const UrlForm = () => {
               </button>
             </div>
           </div>
-        )} */}
+        )}
     </div>
   );
 };
