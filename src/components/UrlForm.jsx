@@ -4,27 +4,29 @@ import { createShortUrl } from "../api/shortUrl.api";
 
 const UrlForm = () => {
   const [url, setUrl] = useState("https://www.google.com");
-  const [error, setError] = useState(null)
-  const [shortUrl, setShortUrl] = useState()
-  const [copied, setCopied] = useState(null)
+  const [error, setError] = useState(null);
+  const [shortUrl, setShortUrl] = useState();
+  const [copied, setCopied] = useState(null);
+
   const handleSubmit = async () => {
     try {
-      const shortUrl = await createShortUrl(url)
-      setShortUrl(shortUrl)
+      const shortUrl = await createShortUrl(url);
+      setShortUrl(shortUrl);
+      setError(null);
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     }
-  }
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shortUrl);
     setCopied(true);
-    
+
     // Reset the copied state after 2 seconds
     setTimeout(() => {
       setCopied(false);
     }, 2000);
-  }
+  };
 
   return (
     <div className="space-y-4">
@@ -53,10 +55,10 @@ const UrlForm = () => {
         Shorten URL
       </button>
       {error && (
-          <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-md">
-            {error}
-          </div>
-        )}
+        <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-md">
+          {error}
+        </div>
+      )}
       {/* {isAuthenticated && (
           <div className="mt-4">
             <label htmlFor="customSlug" className="block text-sm font-medium text-gray-700 mb-1">
@@ -70,29 +72,29 @@ const UrlForm = () => {
             />
           </div>
         )} */}
-        {shortUrl && (
-          <div className="mt-6">
-            <h2 className="text-lg font-semibold mb-2">Your shortened URL:</h2>
-            <div className="flex items-center">
-              <input
-                type="text"
-                readOnly
-                value={shortUrl}
-                className="flex-1 p-2 border border-gray-300 rounded-l-md bg-gray-50"
-              />
-               <button
-                onClick={handleCopy}
-                className={`px-4 py-2 rounded-r-md transition-colors duration-200 ${
-                  copied 
-                    ? 'bg-green-500 text-white hover:bg-green-600' 
-                    : 'bg-gray-200 hover:bg-gray-300'
-                }`}
-              >
-                {copied ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
+      {shortUrl && (
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold mb-2">Your shortened URL:</h2>
+          <div className="flex items-center">
+            <input
+              type="text"
+              readOnly
+              value={shortUrl}
+              className="flex-1 p-2 border border-gray-300 rounded-l-md bg-gray-50"
+            />
+            <button
+              onClick={handleCopy}
+              className={`px-4 py-2 rounded-r-md transition-colors duration-200 ${
+                copied
+                  ? "bg-green-500 text-white hover:bg-green-600"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              {copied ? "Copied!" : "Copy"}
+            </button>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };
