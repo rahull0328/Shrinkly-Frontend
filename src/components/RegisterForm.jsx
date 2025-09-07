@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { loginUser } from "../api/user.api";
+import { registerUser } from "../api/user.api";
 
-const LoginForm = ({ state }) => {
-  const [email, setEmail] = useState("johndoe@gmail.com");
-  const [password, setPassword] = useState("password123");
+const RegisterForm = ({ state }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -14,14 +15,15 @@ const LoginForm = ({ state }) => {
     setError("");
 
     try {
-      const data = await loginUser(password, email);
-      dispatch(login(data.user));
+
+      const data = await registerUser({ name, email, password });
+      dispatch(register(data.user));
       navigate({ to: "/dashboard" });
       setLoading(false);
-      console.log("signin success");
+      console.log("registration success");
     } catch (err) {
       setLoading(false);
-      setError(err.message || "Login failed. Please check your credentials.");
+      setError(err.message || "Registration failed. Please try again.");
     }
   };
 
@@ -29,7 +31,7 @@ const LoginForm = ({ state }) => {
     <div className="w-full min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-6">
       <div className="backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl rounded-2xl px-10 pt-8 pb-10 w-full max-w-md">
         <h2 className="text-3xl font-extrabold text-center mb-6 text-white tracking-wide">
-          Welcome Back 👋
+          Create Account ✨
         </h2>
 
         {error && (
@@ -39,33 +41,39 @@ const LoginForm = ({ state }) => {
         )}
 
         <div className="mb-5">
-          <label
-            className="block text-white text-sm font-semibold mb-2"
-            htmlFor="email"
-          >
+          <label className="block text-white text-sm font-semibold mb-2">
+            Full Name
+          </label>
+          <input
+            className="w-full px-4 py-3 rounded-xl border border-gray-300/20 bg-white/20 text-white placeholder-gray-200 focus:ring-2 focus:ring-pink-400 focus:outline-none transition"
+            type="text"
+            placeholder="John Doe"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="mb-5">
+          <label className="block text-white text-sm font-semibold mb-2">
             Email
           </label>
           <input
             className="w-full px-4 py-3 rounded-xl border border-gray-300/20 bg-white/20 text-white placeholder-gray-200 focus:ring-2 focus:ring-pink-400 focus:outline-none transition"
-            id="email"
             type="email"
-            placeholder="Enter your email"
+            placeholder="johndoe@gmail.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
 
-        <div className="mb-6">
-          <label
-            className="block text-white text-sm font-semibold mb-2"
-            htmlFor="password"
-          >
+        <div className="mb-5">
+          <label className="block text-white text-sm font-semibold mb-2">
             Password
           </label>
           <input
             className="w-full px-4 py-3 rounded-xl border border-gray-300/20 bg-white/20 text-white placeholder-gray-200 focus:ring-2 focus:ring-pink-400 focus:outline-none transition"
-            id="password"
             type="password"
             placeholder="••••••••••"
             value={password}
@@ -78,23 +86,23 @@ const LoginForm = ({ state }) => {
           className={`w-full py-3 rounded-xl font-semibold text-lg transition-all shadow-lg ${
             loading
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-gradient-to-r from-pink-500 to-purple-500 hover:scale-105 hover:shadow-xl text-white"
+              : "bg-gradient-to-r from-purple-500 to-pink-500 hover:scale-105 hover:shadow-xl text-white"
           }`}
           type="submit"
           onClick={handleSubmit}
           disabled={loading}
         >
-          {loading ? "Signing in..." : "Sign In"}
+          {loading ? "Registering..." : "Register"}
         </button>
 
         <div className="text-center mt-6">
           <p className="text-sm text-gray-200">
-            Don’t have an account?{" "}
+            Already have an account ?{" "}
             <span
-              onClick={() => state(false)}
+              onClick={() => state(true)}
               className="text-pink-300 font-semibold cursor-pointer hover:text-pink-400 transition"
             >
-              Register
+              Sign In
             </span>
           </p>
         </div>
@@ -103,4 +111,4 @@ const LoginForm = ({ state }) => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
