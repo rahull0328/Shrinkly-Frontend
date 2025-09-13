@@ -4,7 +4,7 @@ import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import AuthPage from "./pages/AuthPage";
 
-const App = () => {
+const RootLayout = () => {
   return (
     <>
       <AuthPage />
@@ -12,4 +12,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default RootLayout;
