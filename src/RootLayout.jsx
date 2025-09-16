@@ -1,10 +1,12 @@
 import React from "react";
-import HomePage from "./pages/HomePage";
+import { Outlet } from "@tanstack/react-router";
+import Navbar from "./shared/Navbar";
 
 const RootLayout = () => {
   return (
     <>
-      <HomePage />
+      <Navbar />
+      <Outlet />
     </>
   );
 };
